@@ -150,7 +150,7 @@ class BS:
         with open(self.fileName1, 'ab') as handle:
             pickle.dump((loss, self.epsilon), handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-        if self.id == 0 and self.e % 50 == 0:
+        if self.id == 0 and self.e % 20 == 0:
             print('BS : ', self.id, ', episode : ', self.e, ' loss : ', loss, ' , epsilon : ', self.epsilon)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
