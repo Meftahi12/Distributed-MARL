@@ -39,21 +39,21 @@ class BS:
         self.connectedStations.append(bs)
 
     def start(self):
-        EPISODES = 1000
+        EPISODES = 1200
         episodes_time = []
         episodes_eps = []
         for _ in range(EPISODES):
             self.done.append(False)
         batch_size = 32
         for self.e in range(EPISODES):
-            # print "BS ", self.id, ", episode : ", self.e
             self.state = []
-            self.env.reset()
             for i in range(self.blocsNumber * self.env.stationsNumber):
                 if self.blocsNumber * self.id <= i < self.blocsNumber * (self.id + 1):
                     self.state.append(0)
                 else:
                     self.state.append(1)
+            self.env.reset()
+
             self.state = np.reshape(self.state, [1, len(self.state)])
             time = 0
             episode_reward = 0
@@ -150,7 +150,7 @@ class BS:
         with open(self.fileName1, 'ab') as handle:
             pickle.dump((loss, self.epsilon), handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-        if self.id == 0 and self.e % 20 == 0:
+        if self.id == 0 and self.e % 10 == 0:
             print('BS : ', self.id, ', episode : ', self.e, ' loss : ', loss, ' , epsilon : ', self.epsilon)
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
@@ -164,11 +164,12 @@ class BS:
     def step(self, action, state):
         reward = 0
         row = len(self.users)
-        col = self.blocsNumber * len(self.env.stationsList)
+        col = self.state_size
         for i in range(row):
             for ii in range(col):
                 if state[0][ii] == 0.5 or not action & (1 << (i * col + ii)):
                     continue
+
                 rbId = ii
 
                 if state[0][rbId] == 0:
