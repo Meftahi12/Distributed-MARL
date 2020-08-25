@@ -14,7 +14,7 @@ class Env:
         self.usersNumber = 6
         self.urllcUsersNumber = 4
         self.embbUsersNumber = 2
-        self.rbNumber = 3
+        self.rbNumber = 5
         self.stationsList = []
 
         currentUserIndice = 0
